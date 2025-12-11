@@ -2,20 +2,18 @@
 import Link from "next/link";
 import Navbar from "@/Components/Navbar";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Trash, Pen } from "lucide-react";
 import Image from "next/image";
 
 type NewsItem = {
-  id: number;           // ubah ke number jika DB int8
+  id: number;      
   title: string;
   author: string;
   created_at: string;
   thumbnail: string;
 };
 
-export default function Postingans() {
-  const router = useRouter();
+export default function Postingan() {
   const [getData, setData] = useState<NewsItem[]>([]);
 
   useEffect(() => {
@@ -45,19 +43,6 @@ export default function Postingans() {
     })();
   }, []);
   
-  const editNews = async(newsId: number) => {
-    if(newsId === undefined || newsId === null) {
-      console.log("Invalid Id for Edit", newsId);
-      return;
-    }
-    try{
-      const res = await fetch("/api/editPostById", {
-        method: "POST",
-      })
-    }catch (err) {
-      console.log("failed to edit", err)
-    }
-  }
   const deleteNews = async (newsId: number) => {
     if (newsId === undefined || newsId === null) {
       console.error("Invalid Id for delete:", newsId);
@@ -71,7 +56,6 @@ export default function Postingans() {
         body: JSON.stringify({ id: newsId }),
       });
       const json = await res.json();
-      console.log("delete response:", json);
       setData(prev => prev.filter(item => item.id !== newsId));
       alert("Berita berhasil dihapus!");
     } catch (err) {
